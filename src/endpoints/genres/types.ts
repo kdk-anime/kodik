@@ -1,16 +1,16 @@
-interface QualitiesArguments extends MediaFilter {
+export interface GenresArguments extends MediaFilter {
 	genresType: GenreType
 	types: MaterialType[]
 	year: number
-	translationId: Array<TranslationEntity['id']>
-	blockTranslations: Array<TranslationEntity['id']>
+	translationId: Array<TranslationSharedEntity['id']>
+	blockTranslations: Array<TranslationSharedEntity['id']>
 	translationType: TranslationType
 	hasField: keyof GenresArguments
 	lgbt: boolean
 	sort: DictionarySortType | 'title'
 }
 
-interface QualityEntity {
+export interface GenreEntity {
 	title: string
 	count: number
 }

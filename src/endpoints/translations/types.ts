@@ -1,4 +1,4 @@
-type TranslationType = 'voice' | 'subtitles'
+export type TranslationType = 'voice' | 'subtitles'
 
 interface TranslationArgumentsBase extends MediaFilter {
 	types: MaterialType
@@ -11,9 +11,9 @@ interface TranslationArgumentsBase extends MediaFilter {
 
 type TranslationStrictFilter = 'hasField'
 
-type TranslationArguments = TranslationArgumentsBase & StrictlyAll<TranslationArgumentsBase, TranslationStrictFilter>
+export type TranslationArguments = TranslationArgumentsBase & StrictlyAll<TranslationArgumentsBase, TranslationStrictFilter>
 
-interface TranslationEntity {
+export interface TranslationEntity {
 	id: ID
 	title: string
 	count: number
