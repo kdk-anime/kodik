@@ -17,7 +17,7 @@ export class KodikClient {
 		T extends keyof typeof endpointsConfig,
 		TArgs extends Partial<EndpointsType[T][0]>,
 		TEntity extends EndpointsType[T][1],
-	>(name: keyof typeof endpointsConfig): EndpointClass<T, TArgs, TEntity> {
+	>(name: T): EndpointClass<T, TArgs, TEntity> {
 		return new EndpointClass(name, this.token, this.fetch)
 	}
 }

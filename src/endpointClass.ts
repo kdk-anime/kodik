@@ -1,5 +1,7 @@
 import { endpointsConfig, type EndpointsType } from './endpointsConfig'
 import { kodikEndpoint } from './config'
+import { camelCaseToSnakeCase, snakeCaseToCamelCase } from './shared/lib/namingConversion'
+import { deepNestingKeyConversion } from './shared/lib/object'
 
 export class EndpointClass<T extends keyof typeof endpointsConfig, TArgs extends Partial<EndpointsType[T][0]>, TEntity extends EndpointsType[T][1]> {
 	private readonly endpointName: string
@@ -37,13 +39,15 @@ export class EndpointClass<T extends keyof typeof endpointsConfig, TArgs extends
 			url = this.pagination.nextPage
 		} else {
 			const record = Object.entries(this.arguments).map(([key, value]) => [
-				key,
+				camelCaseToSnakeCase(key),
 				Array.isArray(value) ? value.join(',') : value.toString()
 			])
+			record.push(['token', this.token])
 			const args = new URLSearchParams(record)
 			url += `?${args.toString()}`
 		}
-		const data = await this.fetch(url) as ApiResponse<TEntity>
+		const rawData = await this.fetch(url)
+		const data = deepNestingKeyConversion(rawData, snakeCaseToCamelCase) as ApiResponse<TEntity>
 
 		this.pagination = {
 			prevPage: data.prevPage,

@@ -1,4 +1,5 @@
 import type { TranslationEntity } from '../../endpoints'
+import { type MaterialEntity } from './materialEntity'
 
 export interface DataEntity {
 	id: ID
@@ -31,4 +32,5 @@ export interface DataEntity {
 	episodesCount: number
 	blockedSeasons: Array<`${number}`> | 'all'
 	screenshots: string[]
+	materialData?: MaterialEntity
 }
