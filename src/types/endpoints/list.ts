@@ -1,11 +1,17 @@
+import type { MaterialType, OrderType, SortType } from '../constants'
+import type { DataEntity } from '../entities'
+import type { MediaFilter } from '../mediaFilter'
+import type { ID, StrictlyAll } from '../shared'
+import type { TranslationType } from './translations'
+
 interface ListArgumentsBase extends MediaFilter {
 	limit: number
 	sort: SortType
 	order: OrderType
 	types: MaterialType
 	years: number[]
-	translationId: Array<TranslationSharedEntity['id']>
-	blockTranslations: Array<TranslationSharedEntity['id']>
+	translationId: ID[]
+	blockTranslations: ID[]
 	translationType: TranslationType
 	hasField: keyof ListArguments[]
 	camRip: boolean

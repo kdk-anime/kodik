@@ -1,3 +1,6 @@
+import type { AnimeKind, RatingMPAA, ReleaseStatus } from '../constants'
+import type { Datestamp, Timestamp } from '../shared'
+
 interface CinemaStaff {
 	actors: string[]
 	directors: string[]

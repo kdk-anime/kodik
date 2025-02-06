@@ -1,4 +1,4 @@
-interface ApiResponse<T extends object> {
+export interface ApiResponse<T extends object> {
 	time: `${number}ms`
 	total: number
 	prevPage: string | null

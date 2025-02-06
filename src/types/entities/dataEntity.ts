@@ -1,5 +1,7 @@
-import type { TranslationEntity } from '../../endpoints'
-import { type MaterialEntity } from './materialEntity'
+import type { MaterialType } from '../constants'
+import type { TranslationEntity } from '../endpoints'
+import type { ID, Timestamp } from '../shared'
+import type { MaterialEntity } from './materialEntity'
 
 export interface DataEntity {
 	id: ID

@@ -1,4 +1,4 @@
-export * from './kodikClient'
-export type * from './endpointClass'
-export type * from './endpointsConfig'
-export type * from './shared/entities'
+export type * from './types'
+export * from './Client'
+export * from './config'
+export * from './EndpointClient'

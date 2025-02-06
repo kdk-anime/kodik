@@ -1,3 +1,6 @@
+import type { AnimeKind, RatingMPAA, ReleaseStatus } from './constants'
+import type { NumberWithRange, StrictlyAll } from './shared'
+
 interface MediaFilterBase {
 	countries: string[]
 	genres: string[]
@@ -31,4 +34,4 @@ interface MediaFilterBase {
 type MediaStrictFilterKeys = 'countries' | 'genres' | 'directors' | 'producers' | 'writers' | 'composers' | 'editors'
 | 'designers' | 'operators' | 'myDramaListTags' | 'animeStudios' | 'animeLicensedBy'
 
-type MediaFilter = MediaFilterBase & StrictlyAll<MediaFilterBase, MediaStrictFilterKeys>
+export type MediaFilter = MediaFilterBase & StrictlyAll<MediaFilterBase, MediaStrictFilterKeys>

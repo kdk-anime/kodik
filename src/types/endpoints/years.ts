@@ -1,9 +1,12 @@
-import type { TranslationType } from '../translations/types'
+import type { ID } from '../shared'
+import type { DictionarySortType, MaterialType } from '../constants'
+import type { MediaFilter } from '../mediaFilter'
+import type { TranslationType } from './translations'
 
 export interface YearsArguments extends MediaFilter {
 	types: MaterialType[]
-	translationId: Array<TranslationSharedEntity['id']>
-	blockTranslations: Array<TranslationSharedEntity['id']>
+	translationId: ID[]
+	blockTranslations: ID[]
 	translationType: TranslationType
 	hasField: keyof YearsArguments
 	lgbt: boolean

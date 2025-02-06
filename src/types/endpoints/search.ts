@@ -1,3 +1,9 @@
+import type { MaterialType } from '../constants'
+import type { DataEntity } from '../entities'
+import type { MediaFilter } from '../mediaFilter'
+import type { ID, StrictlyAll } from '../shared'
+import type { TranslationType } from './translations'
+
 interface SearchArgumentsBase extends MediaFilter {
 	title: string
 	titleOrig: string
@@ -15,13 +21,13 @@ interface SearchArgumentsBase extends MediaFilter {
 	limit: number
 	types: MaterialType
 	year: number
-	translationId: Array<TranslationSharedEntity['id']>
+	translationId: ID[]
 	translationType: TranslationType
 	hasField: keyof SearchArguments
-	prioritizeTranslations: Array<ID | TranslationSharedEntity['id']>
-	unprioritizeTranslations: Array<ID | TranslationSharedEntity['id']>
+	prioritizeTranslations: ID[]
+	unprioritizeTranslations: ID[]
 	prioritizeTranslation: TranslationType
-	blockTranslations: Array<TranslationSharedEntity['id']>
+	blockTranslations: ID[]
 	camrip: boolean
 	lgbt: boolean
 	withSeasons: boolean

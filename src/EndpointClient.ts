@@ -1,9 +1,9 @@
-import { endpointsConfig, type EndpointsType } from './endpointsConfig'
-import { kodikEndpoint } from './config'
-import { camelCaseToSnakeCase, snakeCaseToCamelCase } from './shared/lib/namingConversion'
-import { deepNestingKeyConversion } from './shared/lib/object'
+import { camelCaseToSnakeCase, snakeCaseToCamelCase } from './libs/namingConversion'
+import { deepNestingKeyConversion } from './libs/object'
+import { endpoints, endpointOrigin } from './config'
+import type { FetchFunction, EndpointsTypeMap, ApiResponse } from './types'
 
-export class EndpointClass<T extends keyof typeof endpointsConfig, TArgs extends Partial<EndpointsType[T][0]>, TEntity extends EndpointsType[T][1]> {
+export class KodikEndpointClient<T extends keyof typeof endpoints, TArgs extends Partial<EndpointsTypeMap[T][0]>, TEntity extends EndpointsTypeMap[T][1]> {
 	private readonly endpointName: string
 
 	private readonly endpointAddress: string
@@ -18,7 +18,7 @@ export class EndpointClass<T extends keyof typeof endpointsConfig, TArgs extends
 
 	constructor (name: T, token: string, fetch: FetchFunction) {
 		this.endpointName = name
-		this.endpointAddress = endpointsConfig[name]
+		this.endpointAddress = endpoints[name]
 		this.token = token
 		this.fetch = fetch
 	}
@@ -34,7 +34,7 @@ export class EndpointClass<T extends keyof typeof endpointsConfig, TArgs extends
 	}
 
 	async next (): Promise<TEntity[]> {
-		let url = kodikEndpoint + this.endpointAddress
+		let url = endpointOrigin + this.endpointAddress
 		if (this.pagination.nextPage != null) {
 			url = this.pagination.nextPage
 		} else {

@@ -1,3 +1,7 @@
+import type { DictionarySortType, MaterialType } from '../constants'
+import type { MediaFilter } from '../mediaFilter'
+import type { ID, StrictlyAll } from '../shared'
+
 export type TranslationType = 'voice' | 'subtitles'
 
 interface TranslationArgumentsBase extends MediaFilter {
