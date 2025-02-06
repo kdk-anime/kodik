@@ -1,12 +1,14 @@
 {
   "name": "@kdk-anime/kodik",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "",
   "main": "src/index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "files": ["src"],
+  "files": [
+    "src"
+  ],
   "author": "Matvey Kuznetsov <me@fle.su>",
   "license": "ISC",
   "devDependencies": {
