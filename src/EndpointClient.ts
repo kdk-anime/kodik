@@ -4,49 +4,58 @@ import { endpoints, endpointOrigin } from './config'
 import type { FetchFunction, EndpointsTypeMap, ApiResponse } from './types'
 
 export class KodikEndpointClient<T extends keyof typeof endpoints, TArgs extends Partial<EndpointsTypeMap[T][0]>, TEntity extends EndpointsTypeMap[T][1]> {
-	private readonly endpointName: string
-
 	private readonly endpointAddress: string
 
-	private readonly token: string
-
-	private readonly fetch: FetchFunction
-
-	private arguments: TArgs | object = {}
+	private internalArguments: TArgs = Object()
 
 	private pagination: Record<'prevPage' | 'nextPage', string | null> = { prevPage: null, nextPage: null }
 
-	constructor (name: T, token: string, fetch: FetchFunction) {
-		this.endpointName = name
-		this.endpointAddress = endpoints[name]
-		this.token = token
-		this.fetch = fetch
+	constructor (
+		readonly endpointName: T,
+		private readonly token: string,
+		private readonly fetchFunction: FetchFunction
+	) {
+		this.endpointAddress = new URL(endpoints[endpointName], endpointOrigin).href
 	}
 
+	/**
+	 * Sets a new arguments for next request
+	 */
 	set (obj: TArgs): this {
-		this.arguments = obj
+		this.internalArguments = obj
 		return this
 	}
 
+	/**
+	 * Adds a new arguments to the current one
+	 */
 	add (obj: TArgs): this {
-		Object.assign(this.arguments, obj)
+		Object.assign(this.internalArguments, obj)
 		return this
 	}
 
-	async next (): Promise<TEntity[]> {
-		let url = endpointOrigin + this.endpointAddress
-		if (this.pagination.nextPage != null) {
-			url = this.pagination.nextPage
-		} else {
-			const record = Object.entries(this.arguments).map(([key, value]) => [
-				camelCaseToSnakeCase(key),
-				Array.isArray(value) ? value.join(',') : value.toString()
-			])
-			record.push(['token', this.token])
-			const args = new URLSearchParams(record)
-			url += `?${args.toString()}`
-		}
-		const rawData = await this.fetch(url)
+	/**
+	 * Returns deep copy of arguments
+	 */
+	get arguments (): TArgs {
+		return JSON.parse(JSON.stringify(this.internalArguments))
+	}
+
+	/**
+	 * Fetches data from an endpoint. Url and arguments may be overwritten by passing them
+	 */
+	async fetch (uri?: string, obj?: TArgs): Promise<TEntity[]> {
+		const url = new URL(uri ?? this.endpointAddress)
+
+		Object.entries(obj ?? this.internalArguments)
+			.concat(['token', this.token])
+			.forEach(([key, value]) => {
+				const preparedKey = camelCaseToSnakeCase(key)
+				const preparedValue = Array.isArray(value) ? value.join(',') : value.toString()
+				url.searchParams.append(preparedKey, preparedValue)
+			})
+
+		const rawData = await this.fetchFunction(url.href)
 		const data = deepNestingKeyConversion(rawData, snakeCaseToCamelCase) as ApiResponse<TEntity>
 
 		this.pagination = {
@@ -57,18 +66,21 @@ export class KodikEndpointClient<T extends keyof typeof endpoints, TArgs extends
 		return data.results
 	}
 
+	/**
+	 * Fetches next page or first
+	 */
+	async next (): Promise<TEntity[]> {
+		return await this.fetch(this.pagination.nextPage ?? undefined)
+	}
+
+	/**
+	 * Fetches previous page
+	 */
 	async prev (): Promise<TEntity[] | null> {
 		if (this.pagination.prevPage == null) {
-			return null
+			throw new ReferenceError('No more pages')
 		}
 
-		const data = await this.fetch(this.pagination.prevPage) as ApiResponse<TEntity>
-
-		this.pagination = {
-			prevPage: data.prevPage,
-			nextPage: data.nextPage
-		}
-
-		return data.results
+		return await this.fetch(this.pagination.prevPage)
 	}
 }

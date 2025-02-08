@@ -5,14 +5,10 @@ import { type EndpointsTypeMap } from './types'
 type FetchFunction = (url: string) => PromiseLike<object>
 
 export class KodikClient {
-	private readonly token: string
-
-	private readonly fetch: FetchFunction
-
-	constructor (token: string, fetch: FetchFunction) {
-		this.token = token
-		this.fetch = fetch
-	}
+	constructor (
+		private readonly token: string,
+		private readonly fetch: FetchFunction
+	) {}
 
 	createEndpoint <
 		T extends keyof typeof endpoints,
