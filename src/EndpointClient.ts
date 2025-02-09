@@ -48,7 +48,7 @@ export class KodikEndpointClient<T extends keyof typeof endpoints, TArgs extends
 		const url = new URL(uri ?? this.endpointAddress)
 
 		Object.entries(obj ?? this.internalArguments)
-			.concat(['token', this.token])
+			.concat([['token', this.token]])
 			.forEach(([key, value]) => {
 				const preparedKey = camelCaseToSnakeCase(key)
 				const preparedValue = Array.isArray(value) ? value.join(',') : value.toString()
